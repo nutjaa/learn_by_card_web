@@ -7,24 +7,24 @@ export { User } from './user';
 // Thing model and types
 export { Thing } from './thing';
 
-export { ThingTranslation } from './thing_translation';
+export { ThingTranslation } from './thingTranslation';
 
 // Group model and types
 export { Group } from './group';
 
 // GroupTranslation model and types
-export { GroupTranslation } from './group_translation';
+export { GroupTranslation } from './groupTranslation';
 
 // Style model and types
 export { Style } from './style';
 
 // StyleTranslation model and types
-export { StyleTranslation } from './style_translation';
+export { StyleTranslation } from './styleTranslation';
 
 export { Media } from './media';
 
 // FlashcardMedia model and types
-export { FlashcardMedia } from './flashcard_media';
+export { FlashcardMedia } from './flashcardMedia';
 
 export { Flashcard } from './flashcard';
 
