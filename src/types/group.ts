@@ -6,21 +6,25 @@ import { GroupTranslation } from './index';
 export class Group extends BaseModel {
   name?: string;
   emojis?: string;
+  emoji1?: string;
+  emoji2?: string;
+  groupTranslations?: GroupTranslation[];
   sortOrder?: number;
   numActiveThings?: number;
+  numActivePremiumThings?: number;
   numActiveDecks?: number;
-  groupTranslations?: GroupTranslation[];
 
   constructor(data: Partial<Group>) {
     super(data);
-    this.name = data.name || '';
-    this.emojis = data.emojis || '';
-    this.sortOrder = data.sortOrder || 0;
-    this.numActiveThings = data.numActiveThings || 0;
-    this.numActiveDecks = data.numActiveDecks || 0;
-    this.groupTranslations = data.groupTranslations
-      ? data.groupTranslations.map((gt) => new GroupTranslation(gt))
-      : [];
+    this.name = data.name;
+    this.emojis = data.emojis;
+    this.emoji1 = data.emoji1;
+    this.emoji2 = data.emoji2;
+    this.groupTranslations = data.groupTranslations;
+    this.sortOrder = data.sortOrder;
+    this.numActiveThings = data.numActiveThings;
+    this.numActivePremiumThings = data.numActivePremiumThings;
+    this.numActiveDecks = data.numActiveDecks;
   }
 
   static fromJSON(json: Record<string, any>): Group {
@@ -28,6 +32,8 @@ export class Group extends BaseModel {
       id: json.id,
       name: json.name,
       emojis: json.emojis,
+      emoji1: json.emoji1,
+      emoji2: json.emoji2,
       sortOrder: json.sortOrder,
       numActiveThings: json.numActiveThings,
       numActiveDecks: json.numActiveDecks,
@@ -45,6 +51,8 @@ export class Group extends BaseModel {
     return {
       name: this.name,
       emojis: this.emojis,
+      emoji1: this.emoji1,
+      emoji2: this.emoji2,
       sortOrder: this.sortOrder,
       numActiveThings: this.numActiveThings,
       numActiveDecks: this.numActiveDecks,
@@ -53,6 +61,6 @@ export class Group extends BaseModel {
   }
 
   getIri(): string {
-    return this.generateIri('/api/groups');
+    return this.generateIri('/api/public/v1/group');
   }
 }
