@@ -1,6 +1,14 @@
 export abstract class BaseApiService {
-  protected publicUrl = 'https://www.learnbycards.com/api/public/v1';
-  protected privateUrl = 'https://www.learnbycards.com/api/auth/v1';
+  // Use proxy URLs for development, direct URLs for production
+  protected publicUrl =
+    process.env.NODE_ENV === 'development'
+      ? '/api/proxy/public'
+      : 'https://www.learnbycards.com/api/public/v1';
+
+  protected privateUrl =
+    process.env.NODE_ENV === 'development'
+      ? '/api/proxy/auth'
+      : 'https://www.learnbycards.com/api/auth/v1';
 
   protected async request<T>(
     endpoint: string,
@@ -39,14 +47,11 @@ export abstract class BaseApiService {
   }
 
   protected getAuthToken(): string | null {
-    // Get token from localStorage, sessionStorage, or your auth store
     return localStorage.getItem('authToken');
   }
 
   protected handleUnauthorized(): void {
-    // Handle unauthorized access (redirect to login, clear token, etc.)
     localStorage.removeItem('authToken');
-    // You might want to redirect to login page or emit an event
     console.warn('Unauthorized access detected');
   }
 }
