@@ -3,9 +3,11 @@
 import { BaseModel } from './base';
 
 export class User extends BaseModel {
-  name: string;
-  email: string;
+  email?: string;
+  name?: string;
   avatar?: string;
+  isVerified?: boolean;
+  roles?: string[];
 
   constructor(data: Partial<User>) {
     super(data);
@@ -20,21 +22,28 @@ export class User extends BaseModel {
       name: json.name,
       email: json.email,
       avatar: json.avatar,
-      createdAt: json.createdAt,
-      updatedAt: json.updatedAt,
+      isVerified: json.isVerified,
+      roles: json.roles || [],
+      created: json.created ? new Date(json.created) : undefined,
+      updated: json.updated ? new Date(json.updated) : undefined,
     });
   }
 
   static fromIri(iri: string, additionalData?: Partial<User>): User {
     const id = this.extractIdFromIri(iri);
-    return new User({ id, ...additionalData });
+    return new User({
+      id: parseInt(id, 10),
+      ...additionalData,
+    });
   }
 
   protected getSerializableFields(): Record<string, any> {
     return {
-      name: this.name,
       email: this.email,
+      name: this.name,
       avatar: this.avatar,
+      isVerified: this.isVerified,
+      roles: this.roles || [],
     };
   }
 
