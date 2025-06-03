@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export abstract class BaseModel<T = any> {
+export abstract class BaseModel<T = unknown> {
   id: number;
   created: Date;
   updated: Date;
