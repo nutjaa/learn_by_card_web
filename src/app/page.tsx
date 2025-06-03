@@ -3,19 +3,26 @@ import { serviceProvider } from '@/services';
 import { GroupsClient } from '@/components/groups/index';
 import { GroupsData } from '../types/api';
 
-export default async function Home() {
-  let initialGroupsData: GroupsData | null = null;
-  let error: string | null = null;
-
+async function fetchInitialGroups(): Promise<{
+  data: GroupsData | null;
+  error: string | null;
+}> {
   try {
     const response = await serviceProvider.groupsApi.fetchGroups(1);
-    initialGroupsData = {
+    const data = {
       ...response,
       groups: response.member,
     } as GroupsData;
+    return { data, error: null };
   } catch (err) {
-    error = err instanceof Error ? err.message : 'Failed to fetch groups';
+    const error = err instanceof Error ? err.message : 'Failed to fetch groups';
+    console.error('Failed to fetch groups:', err);
+    return { data: null, error };
   }
+}
+
+export default async function Home() {
+  const { data: initialGroupsData, error } = await fetchInitialGroups();
 
   return (
     <div className="p-8">
