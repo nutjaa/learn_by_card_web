@@ -56,19 +56,26 @@ export abstract class BaseApiService {
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
       if (response.status === 401) {
-        // Handle unauthorized access
         this.handleUnauthorized();
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(
+        `HTTP error! status: ${response.status}, message: ${
+          errorData?.message || response.statusText
+        }`
+      );
     }
 
     return response.json();
   }
 
   protected getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+  if (typeof window === 'undefined') {
+    return null; // Handle SSR case
   }
+  return localStorage.getItem('authToken');
+}
 
   protected handleUnauthorized(): void {
     localStorage.removeItem('authToken');
