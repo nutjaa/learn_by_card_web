@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { serviceProvider } from '@/services';
+import { GroupsResponse, serviceProvider } from '@/services';
 import { Group } from '@/types/group';
+import { GroupsData } from '../types/api';
 
 // Query keys
 export const groupsQueryKeys = {
@@ -12,14 +13,27 @@ export const groupsQueryKeys = {
 };
 
 // Fetch groups with pagination
-export function useGroups(page: number = 1) {
-  return useQuery({
+export function useGroups(
+  page: number = 1,
+  initialData: GroupsData | null = null
+) {
+  return useQuery<GroupsResponse, Error, GroupsData>({
     queryKey: groupsQueryKeys.list(page),
     queryFn: () => serviceProvider.groupsApi.fetchGroups(page),
-    select: (data) => ({
+    select: (data: GroupsResponse): GroupsData => ({
       ...data,
       groups: data.member.map((group) => Group.fromJSON(group)),
     }),
+    // Convert GroupsData back to GroupsResponse format if initialData exists
+    initialData: initialData
+      ? ({
+          ...initialData,
+          member: initialData.groups.map((group) =>
+            group.toJSON ? group.toJSON() : group
+          ),
+        } as GroupsResponse)
+      : undefined,
+    staleTime: 1000 * 60 * 5,
   });
 }
 
@@ -29,6 +43,6 @@ export function useGroup(id: number) {
     queryKey: groupsQueryKeys.detail(id),
     queryFn: () => serviceProvider.groupsApi.fetchGroup(id),
     select: (data) => Group.fromJSON(data),
-    enabled: !!id, // Only run query if id exists
+    enabled: !!id,
   });
 }

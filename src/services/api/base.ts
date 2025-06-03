@@ -1,14 +1,34 @@
 export abstract class BaseApiService {
   // Use proxy URLs for development, direct URLs for production
-  protected publicUrl =
-    process.env.NODE_ENV === 'development'
+  protected getPublicUrl(): string {
+    // Server-side: use direct API URL
+    if (typeof window === 'undefined') {
+      return 'https://www.learnbycards.com/api/public/v1';
+    }
+
+    // Client-side: use proxy in development, direct in production
+    return process.env.NODE_ENV === 'development'
       ? '/api/proxy/public'
       : 'https://www.learnbycards.com/api/public/v1';
+  }
 
-  protected privateUrl =
-    process.env.NODE_ENV === 'development'
+  protected getPrivateUrl(): string {
+    if (typeof window === 'undefined') {
+      return 'https://www.learnbycards.com/api/auth/v1';
+    }
+
+    return process.env.NODE_ENV === 'development'
       ? '/api/proxy/auth'
       : 'https://www.learnbycards.com/api/auth/v1';
+  }
+
+  protected get publicUrl() {
+    return this.getPublicUrl();
+  }
+
+  protected get privateUrl() {
+    return this.getPrivateUrl();
+  }
 
   protected async request<T>(
     endpoint: string,
