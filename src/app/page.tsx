@@ -1,7 +1,9 @@
-import { APP_CONFIG } from '@/lib/constants';
 import { serviceProvider } from '@/services';
 import { GroupsClient } from '@/components/groups/index';
 import { GroupsData } from '../types/api';
+import { ErrorBoundary } from '../components/providers';
+import { Suspense } from 'react';
+import { LoadingSpinner } from '../components/ui';
 
 async function fetchInitialGroups(): Promise<{
   data: GroupsData | null;
@@ -21,20 +23,27 @@ async function fetchInitialGroups(): Promise<{
   }
 }
 
-export default async function Home() {
+// Separate component for the main content
+async function HomeContent() {
   const { data: initialGroupsData, error } = await fetchInitialGroups();
 
   return (
-    <div className="p-8">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold">{APP_CONFIG.name}</h1>
-        <p className="text-gray-600">{APP_CONFIG.description}</p>
-        <p className="text-sm text-gray-500">Version: {APP_CONFIG.version}</p>
-      </header>
+    <main>
+      <GroupsClient initialData={initialGroupsData} initialError={error} />
+    </main>
+  );
+}
 
-      <main>
-        <GroupsClient initialData={initialGroupsData} initialError={error} />
-      </main>
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto p-8">
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner />}>
+            <HomeContent />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
     </div>
   );
 }
