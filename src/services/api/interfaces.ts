@@ -9,7 +9,7 @@ export interface GroupsResponse {
 }
 
 export interface IGroupsApiService {
-  fetchGroups(page?: number): Promise<GroupsResponse>;
+  fetchGroups(page: number, locale: string): Promise<GroupsResponse>;
   fetchGroup(id: number): Promise<Group>;
 }
 

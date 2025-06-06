@@ -12,3 +12,6 @@ export const ROUTES = {
     cards: '/api/cards',
   },
 } as const;
+
+export const SUPPORTED_LOCALES = ['en', 'fi', 'th', 'ms'];
+export const DEFAULT_LOCALE = 'en';

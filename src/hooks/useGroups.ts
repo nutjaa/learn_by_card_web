@@ -7,7 +7,8 @@ import { GroupsData } from '../types/api';
 export const groupsQueryKeys = {
   all: ['groups'] as const,
   lists: () => [...groupsQueryKeys.all, 'list'] as const,
-  list: (page: number) => [...groupsQueryKeys.lists(), page] as const,
+  list: (page: number, locale: string) =>
+    [...groupsQueryKeys.lists(), page, locale] as const,
   details: () => [...groupsQueryKeys.all, 'detail'] as const,
   detail: (id: number) => [...groupsQueryKeys.details(), id] as const,
 };
@@ -15,11 +16,12 @@ export const groupsQueryKeys = {
 // Fetch groups with pagination
 export function useGroups(
   page: number = 1,
-  initialData: GroupsData | null = null
+  initialData: GroupsData | null = null,
+  locale: string
 ) {
   return useQuery<GroupsResponse, Error, GroupsData>({
-    queryKey: groupsQueryKeys.list(page),
-    queryFn: () => serviceProvider.groupsApi.fetchGroups(page),
+    queryKey: groupsQueryKeys.list(page, locale),
+    queryFn: () => serviceProvider.groupsApi.fetchGroups(page, locale),
     select: (data: GroupsResponse): GroupsData => ({
       ...data,
       groups: data.member.map((group) => Group.fromJSON(group)),

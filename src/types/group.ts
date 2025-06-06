@@ -63,4 +63,13 @@ export class Group extends BaseModel {
   getIri(): string {
     return this.generateIri('/api/public/v1/group');
   }
+
+  getNameTranslation(): string {
+    // If no translations available, return the default name
+    if (!this.groupTranslations || this.groupTranslations.length === 0) {
+      return this.name || '';
+    }
+
+    return this.groupTranslations[0].translation || this.name || '';
+  }
 }

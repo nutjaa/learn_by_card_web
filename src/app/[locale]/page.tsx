@@ -9,8 +9,8 @@ import { trackPageView } from '../../lib/analytics';
 
 // Cache the groups fetching for better performance
 const getCachedGroups = unstable_cache(
-  async () => {
-    const response = await serviceProvider.groupsApi.fetchGroups(1);
+  async (locale: string) => {
+    const response = await serviceProvider.groupsApi.fetchGroups(1, locale);
     return {
       ...response,
       groups: response.member,
@@ -19,16 +19,16 @@ const getCachedGroups = unstable_cache(
   ['initial-groups'],
   {
     revalidate: 300, // 5 minutes
-    tags: ['groups'],
+    tags: ['groups-${locale}', 'groups'],
   }
 );
 
-async function fetchInitialGroups(): Promise<{
+async function fetchInitialGroups(locale: string): Promise<{
   data: GroupsData | null;
   error: string | null;
 }> {
   try {
-    const data = await getCachedGroups();
+    const data = await getCachedGroups(locale);
     return { data, error: null };
   } catch (err) {
     const error = err instanceof Error ? err.message : 'Failed to fetch groups';
@@ -38,8 +38,8 @@ async function fetchInitialGroups(): Promise<{
 }
 
 // Separate component for the main content
-async function HomeContent() {
-  const { data: initialGroupsData, error } = await fetchInitialGroups();
+async function HomeContent({ locale }: { locale: string }) {
+  const { data: initialGroupsData, error } = await fetchInitialGroups(locale);
 
   return (
     <main>
@@ -48,7 +48,8 @@ async function HomeContent() {
   );
 }
 
-export default function Home() {
+export default async function Home({ params }: { params: { locale: string } }) {
+  const { locale } = await params;
   // Track page view
   trackPageView('home');
 
@@ -57,7 +58,7 @@ export default function Home() {
       <div className="container mx-auto p-8">
         <ErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <HomeContent />
+            <HomeContent locale={locale} />
           </Suspense>
         </ErrorBoundary>
       </div>
