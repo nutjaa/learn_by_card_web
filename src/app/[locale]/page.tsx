@@ -1,11 +1,11 @@
 import { serviceProvider } from '@/services';
 import { GroupsClient } from '@/components/groups/index';
-import { GroupsData } from '../types/api';
-import { ErrorBoundary } from '../components/providers';
+import { GroupsData } from '../../types/api';
+import { ErrorBoundary } from '../../components/providers';
 import { Suspense } from 'react';
-import { LoadingSpinner } from '../components/ui';
+import { LoadingSpinner } from '../../components/ui';
 import { unstable_cache } from 'next/cache';
-import { trackPageView } from '../lib/analytics';
+import { trackPageView } from '../../lib/analytics';
 
 // Cache the groups fetching for better performance
 const getCachedGroups = unstable_cache(

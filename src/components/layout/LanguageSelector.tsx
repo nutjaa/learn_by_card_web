@@ -1,10 +1,15 @@
 'use client';
 
+import { useRouter, usePathname } from 'next/navigation';
 import { ChevronDownIcon } from '@/components/ui/icons';
 import { useLanguagesList } from '@/hooks/useLanguages';
-import { useLanguageStore } from '@/store/languageStore';
 import { Language } from '@/types/language';
 import { LoadingSpinner } from '@/components/ui';
+import {
+  buildUrlWithLanguage,
+  getLanguageCodeFromUrl,
+} from '@/lib/language-utils';
+import { useEffect, useState } from 'react';
 
 interface LanguageSelectorProps {
   className?: string;
@@ -15,18 +20,25 @@ export function LanguageSelector({
   className = '',
   isMobile = false,
 }: LanguageSelectorProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const { languages, isLoading, error } = useLanguagesList();
-  const { selectedLanguage, setSelectedLanguage } = useLanguageStore();
+  const [currentLanguageCode, setCurrentLanguageCode] = useState('en');
+
+  // Update current language code when pathname changes
+  useEffect(() => {
+    setCurrentLanguageCode(getLanguageCodeFromUrl());
+  }, [pathname]);
 
   const handleLanguageChange = (value: string) => {
-    const language = languages.find((lang) => lang.id?.toString() === value);
+    const language = languages.find(
+      (lang) => lang.alpha3?.toString() === value
+    );
     if (language) {
-      setSelectedLanguage(language);
+      const newUrl = buildUrlWithLanguage(pathname, language.alpha3 || 'en');
+      router.push(newUrl);
     }
   };
-
-  // Default to English if no language is selected
-  const currentLanguageId = selectedLanguage?.id?.toString() || '147';
 
   if (isLoading) {
     return (
@@ -41,7 +53,7 @@ export function LanguageSelector({
     // Fallback to hardcoded options
     return renderLanguageSelect(
       hardcodedLanguages,
-      currentLanguageId,
+      currentLanguageCode,
       handleLanguageChange,
       isMobile,
       className
@@ -52,7 +64,7 @@ export function LanguageSelector({
     // Fallback to hardcoded options
     return renderLanguageSelect(
       hardcodedLanguages,
-      currentLanguageId,
+      currentLanguageCode,
       handleLanguageChange,
       isMobile,
       className
@@ -61,7 +73,7 @@ export function LanguageSelector({
 
   return renderLanguageSelect(
     languages,
-    currentLanguageId,
+    currentLanguageCode,
     handleLanguageChange,
     isMobile,
     className
@@ -75,7 +87,7 @@ const hardcodedLanguages = [
 
 function renderLanguageSelect(
   languages: Language[] | typeof hardcodedLanguages,
-  currentLanguageId: string,
+  currentLanguageAlpha3: string,
   handleLanguageChange: (value: string) => void,
   isMobile: boolean,
   className: string
@@ -98,10 +110,10 @@ function renderLanguageSelect(
         <select
           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           onChange={(e) => handleLanguageChange(e.target.value)}
-          value={currentLanguageId}
+          value={currentLanguageAlpha3}
         >
           {languages.map((lang) => (
-            <option key={lang.id} value={lang.id?.toString()}>
+            <option key={lang.id} value={lang.alpha3?.toString()}>
               {formatLanguageName(lang)}
             </option>
           ))}
@@ -110,15 +122,19 @@ function renderLanguageSelect(
     );
   }
 
+  console.log('Rendering desktop language selector');
+  // currentLanguageAlpha3
+  console.log('Current language alpha3:', currentLanguageAlpha3);
+
   return (
     <div className={`relative ${className}`}>
       <select
         className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         onChange={(e) => handleLanguageChange(e.target.value)}
-        value={currentLanguageId}
+        value={currentLanguageAlpha3}
       >
         {languages.map((lang) => (
-          <option key={lang.id} value={lang.id?.toString()}>
+          <option key={lang.id} value={lang.alpha3?.toString()}>
             {formatLanguageName(lang)}
           </option>
         ))}
