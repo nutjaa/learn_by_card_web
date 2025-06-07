@@ -35,19 +35,8 @@ export function GroupsList({
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <p className="text-sm text-gray-600">Total: {data.totalItems} groups</p>
-        <button
-          onClick={() => refetch()}
-          className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Refreshing...' : 'Refresh'}
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {data.groups.map((group) => (
           <GroupCard
             key={group.id}
@@ -57,6 +46,6 @@ export function GroupsList({
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }
