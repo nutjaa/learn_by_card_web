@@ -1,33 +1,53 @@
-import { IGroupsApiService, ILanguagesApiService } from './api/interfaces';
-import { GroupsApiService, LanguageApiService } from './api/index';
+import { ServiceRegistry } from './registry/serviceRegistry';
+import {
+  GroupsApiService,
+  IGroupsApiService,
+  ILanguagesApiService,
+  IStylesApiService,
+  LanguageApiService,
+} from './api/index';
+import { StylesApiService } from './api/style';
+import { DecksApiService } from './api/deck';
 
-class ServiceProvider {
-  private _groupsApi?: IGroupsApiService;
-  private _languagesApi?: ILanguagesApiService;
+const registry = new ServiceRegistry();
 
-  get groupsApi(): IGroupsApiService {
-    if (!this._groupsApi) {
-      this._groupsApi = new GroupsApiService();
-    }
-    return this._groupsApi;
-  }
+// Register default implementations
+registry.register('groupsApi', () => new GroupsApiService());
+registry.register('languagesApi', () => new LanguageApiService());
+registry.register('stylesApi', () => new StylesApiService());
+registry.register('decksApi', () => new DecksApiService()); // Assuming you have a DecksApiService
 
-  get languagesApi(): ILanguagesApiService {
-    if (!this._languagesApi) {
-      this._languagesApi = new LanguageApiService();
-    }
-    return this._languagesApi;
-  }
+export const serviceProvider = {
+  get groupsApi() {
+    return registry.get<IGroupsApiService>('groupsApi');
+  },
 
-  // For testing or different implementations
-  setGroupsApi(service: IGroupsApiService): void {
-    this._groupsApi = service;
-  }
+  get languagesApi() {
+    return registry.get<ILanguagesApiService>('languagesApi');
+  },
 
-  // For testing or different implementations
-  setLanguagesApi(service: ILanguagesApiService): void {
-    this._languagesApi = service;
-  }
-}
+  get stylesApi() {
+    return registry.get<IStylesApiService>('stylesApi');
+  },
 
-export const serviceProvider = new ServiceProvider();
+  get decksApi() {
+    return registry.get<DecksApiService>('decksApi');
+  },
+
+  // For testing
+  setGroupsApi(service: IGroupsApiService) {
+    registry.set('groupsApi', service);
+  },
+
+  setLanguagesApi(service: ILanguagesApiService) {
+    registry.set('languagesApi', service);
+  },
+
+  setStylesApi(service: StylesApiService) {
+    registry.set('stylesApi', service);
+  },
+
+  setDecksApi(service: DecksApiService) {
+    registry.set('decksApi', service);
+  },
+};

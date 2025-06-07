@@ -31,3 +31,5 @@ export { Flashcard } from './flashcard';
 export { Language } from './language';
 
 export { Subscription } from './subscription';
+
+export { Deck } from './deck';

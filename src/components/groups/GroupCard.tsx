@@ -2,6 +2,7 @@ import { Group } from '../../types';
 import { useLocale } from '../providers/LocaleProvider';
 import { CardsIcon, CrownIcon } from '../ui/icons';
 import styles from './GroupCard.module.css';
+import Link from 'next/link';
 
 // src/components/groups/GroupCard.tsx
 interface GroupCardProps {
@@ -65,13 +66,13 @@ export function GroupCard({ group, isSelected }: GroupCardProps) {
   const locale = useLocale();
 
   return (
-    <a
+    <Link
+      href={`/${locale}/flashcards/${group.id}-${group.getSlug()}`}
       className={`group block rounded-lg border cursor-pointer transition-colors ${
         isSelected
           ? 'bg-blue-50 border-blue-500'
           : `${backgroundColor} border-gray-200 hover:border-gray-300`
       }`}
-      href={`/${locale}/flashcards/${group.id}-${group.getSlug()}`}
     >
       <div className="p-4">
         <div className="flex items-center">
@@ -79,10 +80,14 @@ export function GroupCard({ group, isSelected }: GroupCardProps) {
             <span className={`text-2xl ${styles.emoji}`}>{firstEmoji}</span>
           </div>
           <div className="flex-1 text-center">
-            <div className={`font-medium text-nowrap truncate  ${textColor}`}>
+            <div className={`font-medium text-nowrap truncate ${textColor}`}>
               {group.getNameTranslation()}
             </div>
-            <div className="text-gray-500 text-sm mt-1">
+            <div
+              className={`text-sm mt-1 ${
+                isSelected ? 'text-blue-600' : textColor
+              }`}
+            >
               <span className="inline-flex items-center gap-1">
                 <CardsIcon />
                 {group.numActiveThings}
@@ -101,6 +106,6 @@ export function GroupCard({ group, isSelected }: GroupCardProps) {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
