@@ -1,5 +1,5 @@
 import { serviceProvider } from '@/services';
-import { GroupsClient } from '@/components/groups/index';
+import { GroupsClient, RunningNavbar } from '@/components/groups/index';
 import { GroupsData } from '../../types/api';
 import { ErrorBoundary } from '../../components/providers';
 import { Suspense } from 'react';
@@ -42,9 +42,12 @@ async function HomeContent({ locale }: { locale: string }) {
   const { data: initialGroupsData, error } = await fetchInitialGroups(locale);
 
   return (
-    <main>
-      <GroupsClient initialData={initialGroupsData} initialError={error} />
-    </main>
+    <>
+      <RunningNavbar initialData={initialGroupsData} />
+      <main className="p-3">
+        <GroupsClient initialData={initialGroupsData} initialError={error} />
+      </main>
+    </>
   );
 }
 
@@ -55,7 +58,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-8">
+      <div className=" mx-auto">
         <ErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
             <HomeContent locale={locale} />

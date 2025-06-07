@@ -24,7 +24,6 @@ export function GroupsClient({ initialData, initialError }: GroupsClientProps) {
   return (
     <div className="space-y-6">
       <section>
-        <h2 className="text-lg font-semibold mb-4">Groups</h2>
         <GroupsList
           query={groupsQuery}
           initialError={initialError}
