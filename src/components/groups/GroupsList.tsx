@@ -9,16 +9,9 @@ import { GroupsData } from '../../types/api';
 interface GroupsListProps {
   query: UseQueryResult<GroupsData, Error>;
   initialError: string | null;
-  selectedGroupId: number | null;
-  onGroupSelect: (id: number) => void;
 }
 
-export function GroupsList({
-  query,
-  initialError,
-  selectedGroupId,
-  onGroupSelect,
-}: GroupsListProps) {
+export function GroupsList({ query, initialError }: GroupsListProps) {
   const { data, isLoading, error, refetch } = query;
   const displayError = error || initialError;
 
@@ -41,8 +34,7 @@ export function GroupsList({
           <GroupCard
             key={group.id}
             group={group}
-            isSelected={selectedGroupId === group.id}
-            onClick={() => onGroupSelect(group.id)}
+            isSelected={false} // Replace with actual selection logic if needed
           />
         ))}
       </div>

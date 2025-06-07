@@ -1,13 +1,12 @@
 import { Group } from '../../types';
+import { useLocale } from '../providers/LocaleProvider';
 import { CardsIcon, CrownIcon } from '../ui/icons';
-import styles from './GroupCard.module.css';  
-
+import styles from './GroupCard.module.css';
 
 // src/components/groups/GroupCard.tsx
 interface GroupCardProps {
   group: Group;
   isSelected: boolean;
-  onClick: () => void;
 }
 
 const backgroundColors = [
@@ -44,7 +43,7 @@ const textColors = [
   'text-rose-700',
 ];
 
-export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
+export function GroupCard({ group, isSelected }: GroupCardProps) {
   // Split emojis to show first and last
   const firstEmoji = group.emoji1 || '';
   const lastEmoji = group.emoji2 || '';
@@ -63,6 +62,8 @@ export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
   const backgroundColor = backgroundColors[colorIndex];
   const textColor = textColors[colorIndex];
 
+  const locale = useLocale();
+
   return (
     <a
       className={`group block rounded-lg border cursor-pointer transition-colors ${
@@ -70,11 +71,7 @@ export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
           ? 'bg-blue-50 border-blue-500'
           : `${backgroundColor} border-gray-200 hover:border-gray-300`
       }`}
-      href="#"
-      onClick={(e) => {
-        e.preventDefault();
-        onClick();
-      }}
+      href={`/${locale}/flashcards/${group.id}-${group.getSlug()}`}
     >
       <div className="p-4">
         <div className="flex items-center">

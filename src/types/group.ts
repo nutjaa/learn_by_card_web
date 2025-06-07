@@ -72,4 +72,8 @@ export class Group extends BaseModel {
 
     return this.groupTranslations[0].translation || this.name || '';
   }
+
+  getSlug(): string {
+    return this.name ? this.name.toLowerCase().replace(/\s+/g, '-') : '';
+  }
 }
