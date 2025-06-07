@@ -62,7 +62,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
       <div className="w-full overflow-hidden">
         <div
           ref={marqueeRef}
-          className="flex animate-marquee hover:pause-animation"
+          className="flex hover:pause-animation"
           style={{
             animation: 'marquee 60s linear infinite',
           }}
@@ -83,8 +83,8 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
         .animate-marquee {
           animation: marquee 60s linear infinite;
         }
-        .pause-animation:hover {
-          animation-play-state: paused;
+        .hover\:pause-animation:hover {
+          animation-play-state: paused !important;
         }
       `}</style>
     </header>
