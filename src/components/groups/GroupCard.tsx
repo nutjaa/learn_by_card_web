@@ -1,5 +1,7 @@
 import { Group } from '../../types';
 import { CardsIcon, CrownIcon } from '../ui/icons';
+import styles from './GroupCard.module.css';  
+
 
 // src/components/groups/GroupCard.tsx
 interface GroupCardProps {
@@ -63,7 +65,7 @@ export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
 
   return (
     <a
-      className={`block rounded-lg border cursor-pointer transition-colors ${
+      className={`group block rounded-lg border cursor-pointer transition-colors ${
         isSelected
           ? 'bg-blue-50 border-blue-500'
           : `${backgroundColor} border-gray-200 hover:border-gray-300`
@@ -77,7 +79,7 @@ export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
       <div className="p-4">
         <div className="flex items-center">
           <div className="flex-shrink-0">
-            <span className="text-2xl">{firstEmoji}</span>
+            <span className={`text-2xl ${styles.emoji}`}>{firstEmoji}</span>
           </div>
           <div className="flex-1 text-center">
             <div className={`font-medium text-nowrap truncate  ${textColor}`}>
@@ -98,7 +100,7 @@ export function GroupCard({ group, isSelected, onClick }: GroupCardProps) {
             </div>
           </div>
           <div className="flex-shrink-0">
-            <span className="text-2xl">{lastEmoji}</span>
+            <span className={`text-2xl ${styles.emoji}`}>{lastEmoji}</span>
           </div>
         </div>
       </div>
