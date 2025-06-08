@@ -3,11 +3,11 @@
 
 import { GroupsList } from './GroupsList';
 import { useGroups } from '@/hooks/useGroups';
-import { GroupsData } from '../../types/api';
 import { useLocale } from '../providers/LocaleProvider';
+import { GroupsResponse } from '../../services';
 
 interface GroupsClientProps {
-  initialData: GroupsData | null;
+  initialData: GroupsResponse | null;
   initialError: string | null;
 }
 

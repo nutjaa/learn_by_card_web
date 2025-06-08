@@ -4,10 +4,10 @@
 import { UseQueryResult } from '@tanstack/react-query';
 import { GroupCard } from './GroupCard';
 import { LoadingSpinner, ErrorMessage } from '@/components/ui';
-import { GroupsData } from '../../types/api';
+import { GroupsResponse } from '../../services';
 
 interface GroupsListProps {
-  query: UseQueryResult<GroupsData, Error>;
+  query: UseQueryResult<GroupsResponse, Error>;
   initialError: string | null;
 }
 
@@ -23,14 +23,14 @@ export function GroupsList({ query, initialError }: GroupsListProps) {
     return <ErrorMessage message={displayError} onRetry={() => refetch()} />;
   }
 
-  if (!data?.groups?.length) {
+  if (!data?.member?.length) {
     return <div className="text-gray-500">No groups found</div>;
   }
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-        {data.groups.map((group) => (
+        {data.member.map((group) => (
           <GroupCard
             key={group.id}
             group={group}
