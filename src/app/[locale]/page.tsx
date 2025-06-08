@@ -5,6 +5,7 @@ import { LoadingSpinner } from '../../components/ui';
 import { trackPageView } from '../../lib/analytics';
 import { safeFetch } from '../../lib/data-fetcher';
 import { getCachedGroups } from '../../services/cached-services';
+import { PageWrapper } from '../../components/layout';
 
 // Simplified fetch function using the cached service
 const fetchInitialGroups = (locale: string) =>
@@ -30,14 +31,8 @@ export default async function Home({ params }: { params: { locale: string } }) {
   trackPageView('home');
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto">
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>
-            <HomeContent locale={locale} />
-          </Suspense>
-        </ErrorBoundary>
-      </div>
-    </div>
+    <PageWrapper>
+      <HomeContent locale={locale} />
+    </PageWrapper>
   );
 }

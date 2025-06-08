@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from '../../../../../components/providers';
 import { LoadingSpinner } from '../../../../../components/ui';
 import { trackPageView } from '../../../../../lib/analytics';
+import { PageWrapper } from '../../../../../components/layout';
 
 export default async function DeckPage({
   params,
@@ -14,12 +15,6 @@ export default async function DeckPage({
   trackPageView('deck');
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto">
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>xxxx</Suspense>
-        </ErrorBoundary>
-      </div>
-    </div>
+    <PageWrapper>xxxx</PageWrapper>
   );
 }

@@ -10,6 +10,7 @@ import {
 import { redirect } from 'next/navigation';
 import { ClientRedirect } from '../../../../components/ui/ClientRedirect';
 import { createSlug } from '../../../../utils/string';
+import { PageWrapper } from '../../../../components/layout';
 
 // Simplified fetch functions
 const fetchInitialStyles = (locale: string) =>
@@ -93,14 +94,8 @@ export default async function GroupPage({
   trackPageView('group detail');
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto">
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>
-            <GroupPageContent locale={locale} group={group} />
-          </Suspense>
-        </ErrorBoundary>
-      </div>
-    </div>
+    <PageWrapper>
+      <GroupPageContent locale={locale} group={group} />
+    </PageWrapper>
   );
 }
