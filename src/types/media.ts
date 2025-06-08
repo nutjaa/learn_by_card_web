@@ -29,14 +29,6 @@ export class Media extends BaseModel {
     });
   }
 
-  static fromIri(iri: string, additionalData?: Partial<Media>): Media {
-    const id = this.extractIdFromIri(iri);
-    return new Media({
-      id: parseInt(id, 10),
-      ...additionalData,
-    });
-  }
-
   getIri(): string {
     return this.generateIri('/api/media');
   }

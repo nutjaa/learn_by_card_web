@@ -68,12 +68,4 @@ export class Deck extends BaseModel {
   getIri(): string {
     return this.generateIri('/api/decks');
   }
-
-  static fromIri(iri: string, additionalData?: Partial<Deck>): Deck {
-    const id = this.extractIdFromIri(iri);
-    return new Deck({
-      id: parseInt(id, 10),
-      ...additionalData,
-    });
-  }
 }

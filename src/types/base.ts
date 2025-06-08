@@ -43,4 +43,16 @@ export abstract class BaseModel<T = unknown> {
   }
 
   protected abstract getSerializableFields(): Record<string, any>;
+
+  static fromIri<T extends BaseModel>(
+    this: new (data: Partial<T>) => T,
+    iri: string,
+    additionalData?: Partial<T>
+  ): T {
+    const id = BaseModel.extractIdFromIri(iri);
+    return new this({
+      id: parseInt(id, 10),
+      ...additionalData,
+    } as Partial<T>);
+  }
 }

@@ -29,14 +29,6 @@ export class User extends BaseModel {
     });
   }
 
-  static fromIri(iri: string, additionalData?: Partial<User>): User {
-    const id = this.extractIdFromIri(iri);
-    return new User({
-      id: parseInt(id, 10),
-      ...additionalData,
-    });
-  }
-
   protected getSerializableFields(): Record<string, any> {
     return {
       email: this.email,
