@@ -1,7 +1,4 @@
 import { GroupsClient, RunningNavbar } from '@/components/groups/index';
-import { ErrorBoundary } from '../../components/providers';
-import { Suspense } from 'react';
-import { LoadingSpinner } from '../../components/ui';
 import { trackPageView } from '../../lib/analytics';
 import { safeFetch } from '../../lib/data-fetcher';
 import { getCachedGroups } from '../../services/cached-services';

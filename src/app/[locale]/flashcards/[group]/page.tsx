@@ -1,7 +1,4 @@
-import { Suspense } from 'react';
-import { ErrorBoundary } from '../../../../components/providers';
 import { trackPageView } from '../../../../lib/analytics';
-import { LoadingSpinner } from '../../../../components/ui';
 import { safeFetch } from '../../../../lib/data-fetcher';
 import {
   getCachedStyles,
