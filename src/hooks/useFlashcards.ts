@@ -4,7 +4,7 @@ import { Flashcard } from '@/types/index';
 
 // Query keys
 export const flashcardsQueryKeys = {
-  all: ['groups'] as const,
+  all: ['flashcards'] as const,
   lists: () => [...flashcardsQueryKeys.all, 'list'] as const,
   list: (page: number, locale: string) =>
     [...flashcardsQueryKeys.lists(), page, locale] as const,

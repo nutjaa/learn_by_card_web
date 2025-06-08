@@ -1,13 +1,17 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  images: {
+    domains: ['img.learnbycards.com'],
+    // Add fallback for export mode
+    ...(process.env.EXPORT_MODE === 'true' && {
+      unoptimized: true,
+    }),
+  },
   // Only use static export when EXPORT_MODE is set
   ...(process.env.EXPORT_MODE === 'true' && {
     output: 'export',
     trailingSlash: true,
-    images: {
-      unoptimized: true,
-    },
   }),
 
   // Use rewrites in development or when not exporting

@@ -7,16 +7,10 @@ interface PageWrapperProps {
   className?: string;
 }
 
-export function PageWrapper({ children, className = "min-h-screen bg-gray-50" }: PageWrapperProps) {
+export function PageWrapper({ children }: PageWrapperProps) {
   return (
-    <div className={className}>
-      <div className="mx-auto">
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>
-            {children}
-          </Suspense>
-        </ErrorBoundary>
-      </div>
-    </div>
+    <ErrorBoundary>
+      <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+    </ErrorBoundary>
   );
 }

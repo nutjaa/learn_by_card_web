@@ -40,8 +40,10 @@ export default function RootLayout({
       >
         <QueryProvider>
           <AuthProvider>
-            <Header />
-            <main>{children}</main>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              {children}
+            </div>
           </AuthProvider>
         </QueryProvider>
       </body>
