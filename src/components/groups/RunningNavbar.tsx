@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
-import { GroupsData } from '../../types/api';
 import { useLocale } from '../providers/LocaleProvider';
 import { useGroups } from '../../hooks/useGroups';
 import { LoadingSpinner } from '../ui';
+import { GroupsResponse } from '../../services';
 
 interface RunningNavbarProps {
-  initialData: GroupsData | null;
+  initialData: GroupsResponse | null;
 }
 
 export function RunningNavbar({ initialData }: RunningNavbarProps) {
@@ -29,7 +29,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
     marquee.style.animationDuration = `${duration}s`;
   }, [data]);
 
-  if (!data?.groups || data.groups.length === 0) {
+  if (!data?.member || data.member.length === 0) {
     return null;
   }
 
@@ -39,7 +39,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
 
   const NavList = () => (
     <ul className="navbar-nav flex flex-nowrap">
-      {data.groups.map((group) => (
+      {data.member.map((group) => (
         <li key={group.id} className="nav-item flex-shrink-0">
           <Link
             href={`/${locale}`}
