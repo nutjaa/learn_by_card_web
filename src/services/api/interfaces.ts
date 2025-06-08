@@ -1,36 +1,25 @@
 import { Deck, Group, Language, Style } from '../../types';
 
-export interface GroupsResponse {
+export interface ApiCollectionResponse<T> {
   '@context': string;
   '@id': string;
   '@type': string;
   totalItems: number;
-  member: Group[];
+  member: T[];
 }
+
+export type GroupsResponse = ApiCollectionResponse<Group>;
+export type LanguagesResponse = ApiCollectionResponse<Language>;
+export type StylesResponse = ApiCollectionResponse<Style>;
+export type DecksResponse = ApiCollectionResponse<Deck>;
 
 export interface IGroupsApiService {
   fetchGroups(page: number, locale: string): Promise<GroupsResponse>;
   fetchGroup(id: number): Promise<Group>;
 }
 
-export interface LanguagesResponse {
-  '@context': string;
-  '@id': string;
-  '@type': string;
-  totalItems: number;
-  member: Language[];
-}
-
 export interface ILanguagesApiService {
   fetchLanguages(): Promise<LanguagesResponse>;
-}
-
-export interface StylesResponse {
-  '@context': string;
-  '@id': string;
-  '@type': string;
-  totalItems: number;
-  member: Style[];
 }
 
 export interface IStylesApiService {
@@ -39,12 +28,4 @@ export interface IStylesApiService {
 
 export interface IDecksApiService {
   fetchDecks(page: number, groupId: number): Promise<DecksResponse>;
-}
-
-export interface DecksResponse {
-  '@context': string;
-  '@id': string;
-  '@type': string;
-  totalItems: number;
-  member: Deck[];
 }
