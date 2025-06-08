@@ -60,6 +60,14 @@ export class Group extends BaseModel {
     };
   }
 
+  static fromIri(iri: string, additionalData?: Partial<Group>): Group {
+    const id = this.extractIdFromIri(iri);
+    return new Group({
+      id: parseInt(id, 10),
+      ...additionalData,
+    });
+  }
+
   getIri(): string {
     return this.generateIri('/api/public/v1/group');
   }

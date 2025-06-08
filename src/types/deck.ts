@@ -36,12 +36,12 @@ export class Deck extends BaseModel {
       numActiveFlashcards: json.numActiveFlashcards || 0,
       group: json.group
         ? typeof json.group === 'string'
-          ? json.group
+          ? Group.fromIri(json.group)
           : Group.fromJSON(json.group)
         : undefined,
       style: json.style
         ? typeof json.style === 'string'
-          ? json.style
+          ? Style.fromIri(json.style)
           : Style.fromJSON(json.style)
         : undefined,
       created: json.created ? new Date(json.created) : undefined,
@@ -67,5 +67,13 @@ export class Deck extends BaseModel {
 
   getIri(): string {
     return this.generateIri('/api/decks');
+  }
+
+  static fromIri(iri: string, additionalData?: Partial<Deck>): Deck {
+    const id = this.extractIdFromIri(iri);
+    return new Deck({
+      id: parseInt(id, 10),
+      ...additionalData,
+    });
   }
 }

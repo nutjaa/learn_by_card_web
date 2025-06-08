@@ -39,4 +39,12 @@ export class Style extends BaseModel {
   getIri(): string {
     return this.generateIri('/api/styles');
   }
+
+  static fromIri(iri: string, additionalData?: Partial<Style>): Style {
+    const id = this.extractIdFromIri(iri);
+    return new Style({
+      id: parseInt(id, 10),
+      ...additionalData,
+    });
+  }
 }
