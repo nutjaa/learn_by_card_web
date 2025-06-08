@@ -7,6 +7,9 @@ import {
   getCachedStyles,
   getCachedDecks,
 } from '../../../../services/cached-services';
+import { redirect } from 'next/navigation';
+import { ClientRedirect } from '../../../../components/ui/ClientRedirect';
+import { createSlug } from '../../../../utils/string';
 
 // Simplified fetch functions
 const fetchInitialStyles = (locale: string) =>
@@ -51,39 +54,18 @@ async function GroupPageContent({
     const style = stylesData.member.find((s) => s.id === styleId);
 
     if (style) {
-      const deckUrl = `/${locale}/flashcards/deck/${firstDeck.id}`;
-      const styleUrl = `/${locale}/flashcards/style/${style.id}`;
+      const redirectUrl = `/${locale}/flashcards/${group}/${
+        firstDeck.id
+      }-${createSlug(style.name)}`;
 
-      return (
-        <div className="p-4">
-          <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-            <h1 className="text-xl font-semibold mb-4">
-              Redirecting to deck...
-            </h1>
-            <div className="space-y-3">
-              <div>
-                <a
-                  href={deckUrl}
-                  className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors"
-                >
-                  Go to Deck
-                </a>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-1">
-                  Style: {style.name}
-                </p>
-                <a
-                  href={styleUrl}
-                  className="inline-block bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded transition-colors"
-                >
-                  Go to Style
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      // Try server-side redirect first
+      try {
+        redirect(redirectUrl);
+      } catch (error) {
+        // If server redirect fails, fall back to client redirect
+        console.log('Server redirect failed, using client redirect', error);
+        return <ClientRedirect to={redirectUrl} />;
+      }
     }
   }
 

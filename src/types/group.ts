@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { createSlug } from '../utils/string';
 import { BaseModel } from './base';
 import { GroupTranslation } from './index';
 
@@ -82,6 +83,6 @@ export class Group extends BaseModel {
   }
 
   getSlug(): string {
-    return this.name ? this.name.toLowerCase().replace(/\s+/g, '-') : '';
+    return createSlug(this.name);
   }
 }

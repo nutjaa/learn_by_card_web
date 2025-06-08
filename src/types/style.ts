@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { createSlug } from '../utils/string';
 import { BaseModel } from './base';
 import { StyleTranslation } from './index';
 
@@ -46,5 +47,9 @@ export class Style extends BaseModel {
       id: parseInt(id, 10),
       ...additionalData,
     });
+  }
+
+  getSlug(): string {
+    return createSlug(this.name);
   }
 }
