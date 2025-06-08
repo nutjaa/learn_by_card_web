@@ -6,6 +6,7 @@ import {
   getCachedGroups,
 } from '../../../../../services/cached-services';
 import { RunningNavbar } from '../../../../../components/groups';
+import { FlashcardsClient } from '../../../../../components/flashcards/FlashcardsClient';
 
 const fetchInitialFlashcards = (locale: string, deckId: number) =>
   safeFetch(
@@ -23,18 +24,26 @@ async function DeckPageContent({
   locale: string;
   deck: string;
 }) {
+  const deckId = parseInt(deck.split('-')[0]);
+
   const [
     { data: flashcardsData, error: flashcardsError },
-    { data: groupsData, error: groupsError },
+    { data: groupsData },
   ] = await Promise.all([
-    fetchInitialFlashcards(locale, parseInt(deck.split('-')[0])),
+    fetchInitialFlashcards(locale, deckId),
     fetchInitialGroups(locale),
   ]);
 
   return (
     <>
       <RunningNavbar initialData={groupsData} />
-      <main className="p-3">xxxx</main>
+      <main>
+        <FlashcardsClient
+          deckId={deckId}
+          initialData={flashcardsData}
+          initialError={flashcardsError}
+        />
+      </main>
     </>
   );
 }

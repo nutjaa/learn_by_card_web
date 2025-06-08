@@ -12,7 +12,6 @@ export const groupsQueryKeys = {
   detail: (id: number) => [...groupsQueryKeys.details(), id] as const,
 };
 
-// Fetch groups with pagination
 export function useGroups(
   page: number = 1,
   initialData: GroupsResponse | null = null,
@@ -25,7 +24,6 @@ export function useGroups(
       ...data,
       member: data.member.map((group) => Group.fromJSON(group)),
     }),
-    // Convert GroupsData back to GroupsResponse format if initialData exists
     initialData: initialData
       ? {
           ...initialData,
