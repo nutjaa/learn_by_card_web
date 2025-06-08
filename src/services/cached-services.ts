@@ -20,3 +20,11 @@ export const getCachedGroups = createCachedFetcher(
   'initial-groups',
   ['groups'] // Note: you had duplicate 'groups' tags, kept as is
 );
+
+export const getCachedFlashcards = createCachedFetcher(
+  async (deckId: number, locale: string) => {
+    return await serviceProvider.flashcardsApi.fetchFlashcards(1, deckId, locale);
+  },
+  'initial-flashcards',
+  ['flashcards']
+);

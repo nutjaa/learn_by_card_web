@@ -5,6 +5,7 @@ import {
   ILanguagesApiService,
   IStylesApiService,
   LanguageApiService,
+  FlashcardsApiService
 } from './api/index';
 import { StylesApiService } from './api/style';
 import { DecksApiService } from './api/deck';
@@ -15,7 +16,8 @@ const registry = new ServiceRegistry();
 registry.register('groupsApi', () => new GroupsApiService());
 registry.register('languagesApi', () => new LanguageApiService());
 registry.register('stylesApi', () => new StylesApiService());
-registry.register('decksApi', () => new DecksApiService()); // Assuming you have a DecksApiService
+registry.register('decksApi', () => new DecksApiService()); 
+registry.register('flashcardsApi', () => new FlashcardsApiService());  
 
 export const serviceProvider = {
   get groupsApi() {
@@ -34,6 +36,10 @@ export const serviceProvider = {
     return registry.get<DecksApiService>('decksApi');
   },
 
+  get flashcardsApi() {
+    return registry.get<FlashcardsApiService>('flashcardsApi');
+  },
+
   // For testing
   setGroupsApi(service: IGroupsApiService) {
     registry.set('groupsApi', service);
@@ -50,4 +56,8 @@ export const serviceProvider = {
   setDecksApi(service: DecksApiService) {
     registry.set('decksApi', service);
   },
+
+  setFlashcardsApi(service: FlashcardsApiService) {
+    registry.set('flashcardsApi', service);
+  }
 };

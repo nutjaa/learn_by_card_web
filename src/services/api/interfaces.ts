@@ -1,4 +1,4 @@
-import { Deck, Group, Language, Style } from '../../types';
+import { Deck, Flashcard, Group, Language, Style } from '../../types';
 
 export interface ApiCollectionResponse<T> {
   '@context': string;
@@ -12,6 +12,7 @@ export type GroupsResponse = ApiCollectionResponse<Group>;
 export type LanguagesResponse = ApiCollectionResponse<Language>;
 export type StylesResponse = ApiCollectionResponse<Style>;
 export type DecksResponse = ApiCollectionResponse<Deck>;
+export type FlashcardsResponse = ApiCollectionResponse<Flashcard>;
 
 export interface IGroupsApiService {
   fetchGroups(page: number, locale: string): Promise<GroupsResponse>;
@@ -28,4 +29,12 @@ export interface IStylesApiService {
 
 export interface IDecksApiService {
   fetchDecks(page: number, groupId: number): Promise<DecksResponse>;
+}
+
+export interface IFlashcardsApiService {
+  fetchFlashcards(
+    page: number,
+    deckId: number,
+    locale: string
+  ): Promise<FlashcardsResponse>; 
 }

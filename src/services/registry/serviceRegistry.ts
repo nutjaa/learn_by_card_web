@@ -2,6 +2,7 @@
 
 import {
   IDecksApiService,
+  IFlashcardsApiService,
   IGroupsApiService,
   ILanguagesApiService,
   IStylesApiService,
@@ -12,6 +13,7 @@ export interface ServiceContainer {
   languagesApi: ILanguagesApiService;
   stylesApi: IStylesApiService;
   decksApi: IDecksApiService;
+  flashcardsApi: IFlashcardsApiService;
 }
 
 export class ServiceRegistry {
