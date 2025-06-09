@@ -135,6 +135,7 @@ export function FlashcardsClient({
         currentIndex={currentIndex}
         onSlideClick={goToSlide}
         isTransitioning={isTransitioning}
+        slides={flashcards}
       />
 
       <audio ref={audioRef} id="audioPlayer" preload="metadata" />
