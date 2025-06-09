@@ -20,7 +20,7 @@ export function NavigationButtons({
       {currentIndex > 0 && (
         <button
           onClick={onPrevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 rounded-full w-15 h-15 hover:bg-black/70 transition-colors duration-200 flex items-center justify-center text-white text-xl font-bold md:block hidden"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 rounded-full w-12 h-12 md:w-15 md:h-15 hover:bg-black/70 transition-colors duration-200 flex items-center justify-center text-white text-xl font-bold"
           disabled={isTransitioning}
         >
           ‹
@@ -30,7 +30,7 @@ export function NavigationButtons({
       {currentIndex < totalSlides - 1 && (
         <button
           onClick={onNextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 rounded-full w-15 h-15 hover:bg-black/70 transition-colors duration-200 flex items-center justify-center text-white text-xl font-bold md:block hidden"
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-black/50 rounded-full w-12 h-12 md:w-15 md:h-15 hover:bg-black/70 transition-colors duration-200 flex items-center justify-center text-white text-xl font-bold"
           disabled={isTransitioning}
         >
           ›
