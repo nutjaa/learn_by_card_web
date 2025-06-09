@@ -8,6 +8,7 @@ interface FlashcardSlideProps {
   backgroundStyle: string;
   isTransitioning: boolean;
   groupName?: string;
+  onPlayAudio?: (audioUrl: string) => void;
 }
 
 export function FlashcardSlide({
@@ -15,8 +16,15 @@ export function FlashcardSlide({
   backgroundStyle,
   isTransitioning,
   groupName,
+  onPlayAudio,
 }: FlashcardSlideProps) {
   const isTransparentBackground = flashcard.transparency == true;
+
+  const handleImageClick = () => {
+    if (flashcard.audioUrl && onPlayAudio) {
+      onPlayAudio(flashcard.audioUrl);
+    }
+  };
 
   return (
     <div
@@ -36,6 +44,7 @@ export function FlashcardSlide({
         <div
           className="relative w-auto h-[60vh] float rotate flex items-center justify-center"
           style={{ backgroundColor: 'transparent' }}
+          onClick={handleImageClick}
         >
           <Image
             src={flashcard.optimizedImageUrl || flashcard.imageUrl || ''}

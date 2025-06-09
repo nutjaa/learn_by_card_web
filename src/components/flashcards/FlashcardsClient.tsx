@@ -125,6 +125,7 @@ export function FlashcardsClient({
             backgroundStyle={backgroundStyles[currentIndex]}
             isTransitioning={isTransitioning}
             groupName={groupData?.getNameTranslation()}
+            onPlayAudio={playAudio}
           />
         )}
       </div>
