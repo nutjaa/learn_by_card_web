@@ -17,6 +17,8 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [hasMoved, setHasMoved] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [pausedProgress, setPausedProgress] = useState(0);
 
   const locale = useLocale();
 
@@ -28,10 +30,35 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
 
     // Calculate animation duration based on content width
     const contentWidth = marquee.scrollWidth;
-    const duration = contentWidth / 100; // Adjust speed as needed
+    const scrollDistance = contentWidth / 2; // Since we duplicate content
+    const duration = scrollDistance / 50; // Adjust speed as needed
 
-    marquee.style.animationDuration = `${duration}s`;
-  }, [data]);
+    let startTime: number;
+    let animationId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      let progress = (elapsed / (duration * 1000)) % 1;
+
+      // Add the paused progress to continue from where we left off
+      progress = (progress + pausedProgress) % 1;
+
+      if (marquee && !isDragging && !isHovered) {
+        marquee.scrollLeft = progress * scrollDistance;
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [data, isDragging, isHovered, pausedProgress]);
 
   // Touch/Mouse event handlers
   const handleStart = (clientX: number) => {
@@ -83,7 +110,20 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
     handleEnd();
   };
 
+  const handleMouseEnter = () => {
+    const marquee = marqueeRef.current;
+    if (marquee) {
+      // Save current progress when pausing
+      const contentWidth = marquee.scrollWidth;
+      const scrollDistance = contentWidth / 2;
+      const currentProgress = marquee.scrollLeft / scrollDistance;
+      setPausedProgress(currentProgress % 1);
+    }
+    setIsHovered(true);
+  };
+
   const handleMouseLeave = () => {
+    setIsHovered(false);
     handleEnd();
   };
 
@@ -142,11 +182,8 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
       <div className="w-full overflow-hidden">
         <div
           ref={marqueeRef}
-          className={`flex hover:pause-animation ${
-            isDragging ? 'cursor-grabbing' : 'cursor-grab'
-          }`}
+          className={`flex ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           style={{
-            animation: 'marquee 60s linear infinite',
             overflowX: 'auto',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -154,6 +191,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
