@@ -11,6 +11,10 @@ export class Thing extends BaseModel {
   constructor(data: Partial<Thing>) {
     super(data);
     this.name = data.name || '';
+    this.group = data.group ? new Group(data.group) : undefined;
+    this.thingTranslations = data.thingTranslations
+      ? data.thingTranslations.map((tt) => new ThingTranslation(tt))
+      : [];
   }
 
   static fromJSON(json: Record<string, any>): Thing {

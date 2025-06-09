@@ -122,10 +122,6 @@ function renderLanguageSelect(
     );
   }
 
-  console.log('Rendering desktop language selector');
-  // currentLanguageAlpha3
-  console.log('Current language alpha3:', currentLanguageAlpha3);
-
   return (
     <div className={`relative ${className}`}>
       <select

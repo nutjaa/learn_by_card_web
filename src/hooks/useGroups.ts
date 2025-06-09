@@ -35,11 +35,12 @@ export function useGroups(
 }
 
 // Fetch single group
-export function useGroup(id: number) {
+export function useGroup(id: number, locale: string, initialData?: Group) {
   return useQuery({
     queryKey: groupsQueryKeys.detail(id),
     queryFn: () => serviceProvider.groupsApi.fetchGroup(id),
     select: (data) => Group.fromJSON(data),
+    initialData: initialData ? Group.fromJSON(initialData) : undefined,
     enabled: !!id,
   });
 }

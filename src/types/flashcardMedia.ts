@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { ColorHelper } from '../utils/color';
 import { BaseModel } from './base';
 import { Media } from './index';
 
@@ -11,9 +12,11 @@ export class FlashcardMedia extends BaseModel {
 
   constructor(data: Partial<FlashcardMedia>) {
     super(data);
-    this.backgroundColor = data.backgroundColor || '';
+    this.backgroundColor =
+      data.backgroundColor || ColorHelper.getRandomHexBackgroundColor();
     this.media = data.media ? new Media(data.media) : undefined;
     this.optimized = data.optimized ? new Media(data.optimized) : undefined;
+    this.transparency = data.transparency || false;
   }
 
   static fromJSON(json: Record<string, any>): FlashcardMedia {

@@ -20,12 +20,14 @@ const fetchInitialGroups = (locale: string) =>
 async function DeckPageContent({
   locale,
   deck,
+  group,
 }: {
   locale: string;
   deck: string;
+  group: string;
 }) {
   const deckId = parseInt(deck.split('-')[0]);
-
+  const groupId = parseInt(group.split('-')[0]);
   const [
     { data: flashcardsData, error: flashcardsError },
     { data: groupsData },
@@ -34,16 +36,17 @@ async function DeckPageContent({
     fetchInitialGroups(locale),
   ]);
 
+  const groupData = groupsData?.member?.find((g) => g.id === groupId);
+
   return (
     <>
       <RunningNavbar initialData={groupsData} />
-      <main>
-        <FlashcardsClient
-          deckId={deckId}
-          initialData={flashcardsData}
-          initialError={flashcardsError}
-        />
-      </main>
+      <FlashcardsClient
+        deckId={deckId}
+        group={groupData}
+        initialData={flashcardsData}
+        initialError={flashcardsError}
+      />
     </>
   );
 }
@@ -51,15 +54,15 @@ async function DeckPageContent({
 export default async function DeckPage({
   params,
 }: {
-  params: { locale: string; deck: string };
+  params: { locale: string; deck: string; group: string };
 }) {
-  const { locale, deck } = await params;
+  const { locale, deck, group } = await params;
 
   trackPageView('deck');
 
   return (
     <PageWrapper>
-      <DeckPageContent locale={locale} deck={deck} />
+      <DeckPageContent locale={locale} deck={deck} group={group} />
     </PageWrapper>
   );
 }

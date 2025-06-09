@@ -19,7 +19,9 @@ export class Flashcard extends BaseModel {
     return new Flashcard({
       id: json.id,
       thing: json.thing ? Thing.fromJSON(json.thing) : undefined,
-      flashcardMedia: json.flashcardMedia,
+      flashcardMedia: json.flashcardMedia
+        ? FlashcardMedia.fromJSON(json.flashcardMedia)
+        : undefined,
     });
   }
 
@@ -38,5 +40,36 @@ export class Flashcard extends BaseModel {
 
   protected getEqualityProperties(): string[] {
     return ['id', 'thing', 'flashcardMedia'];
+  }
+
+  // Computed properties
+  get name(): string | undefined {
+    if (
+      !this.thing?.thingTranslations ||
+      this.thing?.thingTranslations?.length === 0
+    ) {
+      return this.thing?.name;
+    }
+    return this.thing?.thingTranslations?.[0]?.translation;
+  }
+
+  get imageUrl(): string | undefined {
+    return this.flashcardMedia?.media?.url;
+  }
+
+  get optimizedImageUrl(): string | undefined {
+    return this.flashcardMedia?.optimized?.url;
+  }
+
+  get audioUrl(): string | undefined {
+    return this.thing?.thingTranslations?.[0]?.audio?.url;
+  }
+
+  get backgroundColor(): string | undefined {
+    return this.flashcardMedia?.backgroundColor;
+  }
+
+  get transparency(): boolean | undefined {
+    return this.flashcardMedia?.transparency;
   }
 }
