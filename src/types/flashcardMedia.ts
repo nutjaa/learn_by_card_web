@@ -16,6 +16,7 @@ export class FlashcardMedia extends BaseModel {
       data.backgroundColor || ColorHelper.getRandomHexBackgroundColor();
     this.media = data.media ? new Media(data.media) : undefined;
     this.optimized = data.optimized ? new Media(data.optimized) : undefined;
+    this.transparency = data.transparency || false;
   }
 
   static fromJSON(json: Record<string, any>): FlashcardMedia {

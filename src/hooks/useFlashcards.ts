@@ -6,8 +6,8 @@ import { Flashcard } from '@/types/index';
 export const flashcardsQueryKeys = {
   all: ['flashcards'] as const,
   lists: () => [...flashcardsQueryKeys.all, 'list'] as const,
-  list: (page: number, locale: string) =>
-    [...flashcardsQueryKeys.lists(), page, locale] as const,
+  list: (page: number, deckId: number, locale: string) =>
+    [...flashcardsQueryKeys.lists(), page, deckId, locale] as const,
   details: () => [...flashcardsQueryKeys.all, 'detail'] as const,
   detail: (id: number) => [...flashcardsQueryKeys.details(), id] as const,
 };
@@ -19,7 +19,7 @@ export function useFlashcards(
   initialData: FlashcardsResponse | null = null
 ) {
   return useQuery<FlashcardsResponse, Error, FlashcardsResponse>({
-    queryKey: flashcardsQueryKeys.list(page, locale),
+    queryKey: flashcardsQueryKeys.list(page, deckId, locale),
     queryFn: () =>
       serviceProvider.flashcardsApi.fetchFlashcards(page, deckId, locale),
     select: (data: FlashcardsResponse): FlashcardsResponse => ({

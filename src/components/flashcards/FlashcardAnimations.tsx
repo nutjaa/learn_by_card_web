@@ -18,13 +18,13 @@ export function FlashcardAnimations() {
           transform: rotate(0deg);
         }
         25% {
-          transform: rotate(3deg);
+          transform: rotate(1deg);
         }
         50% {
           transform: rotate(0deg);
         }
         75% {
-          transform: rotate(-3deg);
+          transform: rotate(-1deg);
         }
         100% {
           transform: rotate(0deg);
@@ -36,7 +36,7 @@ export function FlashcardAnimations() {
       }
 
       .rotate {
-        animation: rotate 8s ease-in-out infinite;
+        animation: rotate 12s ease-in-out infinite;
       }
 
       .float.rotate {

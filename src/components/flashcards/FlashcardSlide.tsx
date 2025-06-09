@@ -16,6 +16,8 @@ export function FlashcardSlide({
   isTransitioning,
   groupName,
 }: FlashcardSlideProps) {
+  const isTransparentBackground = flashcard.transparency == true;
+
   return (
     <div
       key={flashcard.id}
@@ -32,18 +34,19 @@ export function FlashcardSlide({
       {/* Image container */}
       <div className="flex-1 flex items-center justify-center pb-30 relative">
         <div
-          className="relative w-[80vw] h-[60vh] float rotate"
+          className="relative w-auto h-[60vh] float rotate flex items-center justify-center"
           style={{ backgroundColor: 'transparent' }}
         >
           <Image
             src={flashcard.optimizedImageUrl || flashcard.imageUrl || ''}
             alt={flashcard.name || 'Flashcard image'}
-            fill
+            width={0}
+            height={0}
             sizes="(max-width: 768px) 80vw, (max-width: 1200px) 60vw, 50vw"
-            className="object-contain rounded-2xl transition-transform duration-300 hover:scale-105"
+            className={`object-contain transition-transform duration-300 hover:scale-105 w-auto h-auto max-w-[80vw] max-h-[60vh] ${
+              !isTransparentBackground ? 'rounded-3xl shadow-lg' : ''
+            }`}
             style={{
-              maxHeight: '60vh',
-              maxWidth: '80vw',
               backgroundColor: 'transparent',
             }}
             priority
