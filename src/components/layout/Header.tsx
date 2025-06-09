@@ -24,13 +24,28 @@ export function Header() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 ease-in-out transform hover:scale-105"
             onClick={toggleMenu}
             aria-controls="mobile-menu"
             aria-expanded={isMenuOpen}
           >
             <span className="sr-only">Toggle navigation</span>
-            {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            <div className="relative w-6 h-6">
+              <div
+                className={`absolute inset-0 transition-all duration-300 ease-in-out ${
+                  isMenuOpen ? 'opacity-0 rotate-180' : 'opacity-100 rotate-0'
+                }`}
+              >
+                <MenuIcon />
+              </div>
+              <div
+                className={`absolute inset-0 transition-all duration-300 ease-in-out ${
+                  isMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-180'
+                }`}
+              >
+                <CloseIcon />
+              </div>
+            </div>
           </button>
 
           {/* Brand */}
@@ -60,22 +75,49 @@ export function Header() {
         </div>
 
         {/* Mobile menu */}
-        {isMenuOpen && (
-          <div className="md:hidden" id="mobile-menu">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200">
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+          id="mobile-menu"
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200">
+            <div
+              className={`transform transition-all duration-300 ease-in-out delay-75 ${
+                isMenuOpen
+                  ? 'translate-y-0 opacity-100'
+                  : '-translate-y-4 opacity-0'
+              }`}
+            >
               <LanguageSelector isMobile />
+            </div>
+            <div
+              className={`transform transition-all duration-300 ease-in-out delay-100 ${
+                isMenuOpen
+                  ? 'translate-y-0 opacity-100'
+                  : '-translate-y-4 opacity-0'
+              }`}
+            >
               <ThemeToggle
                 isDarkMode={isDarkMode}
                 onToggle={toggleTheme}
                 isMobile
               />
+            </div>
+            <div
+              className={`transform transition-all duration-300 ease-in-out delay-150 ${
+                isMenuOpen
+                  ? 'translate-y-0 opacity-100'
+                  : '-translate-y-4 opacity-0'
+              }`}
+            >
               <AuthSection
                 isMobile
                 onMobileMenuClose={() => setIsMenuOpen(false)}
               />
             </div>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
