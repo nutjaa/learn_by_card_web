@@ -56,20 +56,34 @@ export function FlashcardsClient({
     }
   };
 
+  // Memoize background styles to prevent recalculation
+  const backgroundStyles = useMemo(() => {
+    return flashcards.map((flashcard) => {
+      const baseColor = flashcard.backgroundColor || '#ffffff';
+      const centerColor = hexToRgba(baseColor, 0.5);
+      const edgeColor = baseColor;
+      return `radial-gradient(circle, ${centerColor} 0%, ${edgeColor} 100%)`;
+    });
+  }, [flashcards]);
+
   const goToSlide = useCallback(
     (index: number) => {
       if (index < 0 || index >= flashcards.length || isTransitioning) return;
 
       setIsTransitioning(true);
-      setCurrentIndex(index);
 
-      // Play audio for the new flashcard
-      const currentFlashcard = flashcards[index];
-      if (currentFlashcard?.audioUrl) {
-        playAudio(currentFlashcard.audioUrl);
-      }
+      // Reduce transition time to minimize flickering
+      setTimeout(() => {
+        setCurrentIndex(index);
 
-      setTimeout(() => setIsTransitioning(false), 300);
+        // Play audio for the new flashcard
+        const currentFlashcard = flashcards[index];
+        if (currentFlashcard?.audioUrl) {
+          playAudio(currentFlashcard.audioUrl);
+        }
+
+        setTimeout(() => setIsTransitioning(false), 150);
+      }, 50);
     },
     [flashcards, isTransitioning]
   );
@@ -169,7 +183,13 @@ export function FlashcardsClient({
   return (
     <div
       ref={containerRef}
-      className="w-full  overflow-hidden relative flex-1 flex flex-col"
+      className="w-full overflow-hidden relative flex-1 flex flex-col"
+      style={{
+        // Set a default background to prevent white flashing
+        background: currentFlashcard
+          ? backgroundStyles[currentIndex]
+          : '#f0f0f0',
+      }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -200,16 +220,13 @@ export function FlashcardsClient({
         {currentFlashcard && (
           <div
             key={currentFlashcard.id}
-            className={`absolute inset-0 flex justify-center items-center p-6 pb-8 transition-opacity duration-300 ${
-              isTransitioning ? 'opacity-0' : 'opacity-100'
+            className={`absolute inset-0 flex justify-center items-center p-6 pb-8 transition-all duration-200 ease-out ${
+              isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
             }`}
             style={{
-              background: (() => {
-                const baseColor = currentFlashcard.backgroundColor || '#ffffff';
-                const centerColor = hexToRgba(baseColor, 0.5);
-                const edgeColor = baseColor;
-                return `radial-gradient(circle, ${centerColor} 0%, ${edgeColor} 100%)`;
-              })(),
+              background: backgroundStyles[currentIndex],
+              // Ensure smooth transition with will-change
+              willChange: 'opacity, transform',
             }}
             data-flashcard-media-id={currentFlashcard.flashcardMedia?.id}
             data-flashcard-id={currentFlashcard.id}
@@ -237,7 +254,14 @@ export function FlashcardsClient({
                     maxWidth: '80vw',
                     backgroundColor: 'transparent',
                   }}
-                  priority={currentIndex === 0}
+                  priority={
+                    Math.abs(
+                      currentIndex -
+                        flashcards.findIndex(
+                          (f) => f.id === currentFlashcard.id
+                        )
+                    ) <= 1
+                  }
                   placeholder="blur"
                   blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAxMCAxMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJ0cmFuc3BhcmVudCIvPgo8L3N2Zz4K"
                 />
@@ -276,6 +300,28 @@ export function FlashcardsClient({
       </div>
 
       <audio ref={audioRef} id="audioPlayer" preload="metadata" />
+
+      {/* Preload next/previous images to reduce loading flicker */}
+      {flashcards.length > 1 && (
+        <div className="hidden">
+          {[currentIndex - 1, currentIndex + 1]
+            .filter((index) => index >= 0 && index < flashcards.length)
+            .map((index) => (
+              <Image
+                key={flashcards[index].id}
+                src={
+                  flashcards[index].optimizedImageUrl ||
+                  flashcards[index].imageUrl ||
+                  ''
+                }
+                alt=""
+                width={1}
+                height={1}
+                priority={false}
+              />
+            ))}
+        </div>
+      )}
 
       <style jsx global>{`
         @keyframes float {
