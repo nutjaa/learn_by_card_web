@@ -101,6 +101,7 @@ export function FlashcardsClient({
 
   return (
     <div
+      suppressHydrationWarning
       ref={containerRef}
       className="w-full overflow-hidden relative flex-1 flex flex-col"
       style={{
