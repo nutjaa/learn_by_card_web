@@ -10,33 +10,33 @@ import { ClientRedirect } from '../../../../components/ui/ClientRedirect';
 import { createSlug } from '../../../../utils/string';
 import { PageWrapper } from '../../../../components/layout';
 import { SUPPORTED_LOCALES } from '../../../../lib/constants';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
-export async function generateStaticParams() { 
-  
+export async function generateStaticParams() {
   // Get all groups for each locale
   const allParams = [];
-  
+
   for (const locale of SUPPORTED_LOCALES) {
     try {
       const { data } = await safeFetch(
         () => getCachedGroups(locale),
         'Failed to fetch groups'
       );
-      
+
       // If we have groups data, add each group to parameters
       if (data && data.member) {
-        const groupParams = data.member.map(group => ({
+        const groupParams = data.member.map((group) => ({
           locale,
-          group: `${group.id}-${createSlug(group.name)}`
+          group: `${group.id}-${createSlug(group.name)}`,
         }));
-        
+
         allParams.push(...groupParams);
       }
     } catch (error) {
       console.error(`Failed to fetch groups for locale ${locale}:`, error);
     }
   }
-  
+
   // Return all params we want to pre-render
   return allParams;
 }
@@ -88,14 +88,8 @@ async function GroupPageContent({
         firstDeck.id
       }-${createSlug(style.name)}`;
 
-      // Try server-side redirect first
-      try {
-        redirect(redirectUrl);
-      } catch (error) {
-        // If server redirect fails, fall back to client redirect
-        console.log('Server redirect failed, using client redirect', error);
-        return <ClientRedirect to={redirectUrl} />;
-      }
+      // Use client-side redirect
+      return <ClientRedirect to={redirectUrl} />;
     }
   }
 
