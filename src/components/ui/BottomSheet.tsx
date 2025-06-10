@@ -49,26 +49,26 @@ export function BottomSheet({
       <div className="fixed inset-0 z-50 flex items-end">
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
+          className="absolute inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm transition-opacity duration-300"
           onClick={onClose}
         />
 
         {/* Bottom Sheet */}
         <div
-          className={`relative w-full bg-white rounded-t-2xl shadow-xl overflow-hidden transform transition-transform duration-300 ease-out ${className}`}
+          className={`relative w-full bg-white dark:bg-gray-900 rounded-t-2xl shadow-xl overflow-hidden transform transition-transform duration-300 ease-out ${className}`}
           style={{ maxHeight }}
         >
           {/* Handle */}
           {showHandle && (
             <div className="flex justify-center py-3">
-              <div className="w-8 h-1 bg-gray-300 rounded-full" />
+              <div className="w-8 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
             </div>
           )}
 
           {/* Header */}
           {title && (
-            <div className="px-4 pb-2 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+            <div className="px-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
             </div>
           )}
 
