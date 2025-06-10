@@ -162,7 +162,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
         <li key={group.id} className="nav-item flex-shrink-0">
           <Link
             href={`/${locale}/flashcards/${group.id}-${group.getSlug()}`}
-            className="nav-link flex items-center px-4 py-2 text-decoration-none hover:bg-gray-100 rounded-lg transition-colors"
+            className="nav-link flex items-center px-4 py-2 text-decoration-none hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-gray-900 dark:text-gray-100"
             onClick={handleLinkClick}
           >
             <span className="nav-link-icon inline-block whitespace-nowrap text-2xl mr-2">
@@ -178,7 +178,7 @@ export function RunningNavbar({ initialData }: RunningNavbarProps) {
   );
 
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       <div className="w-full overflow-hidden">
         <div
           ref={marqueeRef}
