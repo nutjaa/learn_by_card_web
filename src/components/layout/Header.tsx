@@ -9,22 +9,27 @@ import { ThemeToggle } from './ThemeToggle';
 import { AuthSection } from './AuthSection';
 import { MenuIcon, CloseIcon } from '@/components/ui/icons';
 import styles from './Header.module.css';
+import { useTheme } from 'next-themes';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  const isDarkMode = theme === 'dark';
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+  const toggleTheme = () => {
+    setTheme(isDarkMode ? 'light' : 'dark');
+  };
 
   return (
-    <header className="bg-white border-b border-gray-200 print:hidden">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 print:hidden">
       <div className="mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 ease-in-out transform hover:scale-105"
+            className="md:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out transform hover:scale-105"
             onClick={toggleMenu}
             aria-controls="mobile-menu"
             aria-expanded={isMenuOpen}
@@ -81,7 +86,7 @@ export function Header() {
           }`}
           id="mobile-menu"
         >
-          <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200">
+          <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200 dark:border-gray-700">
             <div
               className={`transform transition-all duration-300 ease-in-out delay-75 ${
                 isMenuOpen
