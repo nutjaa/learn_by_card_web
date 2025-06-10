@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
   ...(process.env.EXPORT_MODE === 'true' && {
     output: 'export',
     trailingSlash: true,
+    // Enable SPA-like behavior for dynamic routes
+    dynamicPageRewrites: true
   }),
 
   // Use rewrites in development or when not exporting
