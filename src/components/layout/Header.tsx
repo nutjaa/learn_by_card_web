@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { APP_CONFIG } from '@/lib/constants';
@@ -14,13 +14,27 @@ import { useTheme } from 'next-themes';
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  const isDarkMode = theme === 'dark';
+  // Use this to wait for client-side hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDarkMode = mounted && theme === 'dark';
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleTheme = () => {
     setTheme(isDarkMode ? 'light' : 'dark');
   };
+
+  // Add this for debugging
+  useEffect(() => {
+    if (mounted) {
+      console.log('Current theme:', theme);
+      console.log('HTML has dark class:', document.documentElement.classList.contains('dark'));
+    }
+  }, [mounted, theme]);
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 print:hidden">

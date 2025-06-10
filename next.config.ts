@@ -2,7 +2,13 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['img.learnbycards.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.learnbycards.com',
+        pathname: '/**',
+      },
+    ],
     // Add fallback for export mode
     ...(process.env.EXPORT_MODE === 'true' && {
       unoptimized: true,
