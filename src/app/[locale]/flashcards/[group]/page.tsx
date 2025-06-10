@@ -5,12 +5,10 @@ import {
   getCachedDecks,
   getCachedGroups,
 } from '../../../../services/cached-services';
-import { redirect } from 'next/navigation';
 import { ClientRedirect } from '../../../../components/ui/ClientRedirect';
 import { createSlug } from '../../../../utils/string';
 import { PageWrapper } from '../../../../components/layout';
 import { SUPPORTED_LOCALES } from '../../../../lib/constants';
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export async function generateStaticParams() {
   // Get all groups for each locale
