@@ -54,9 +54,11 @@ async function DeckPageContent({
 export default async function DeckPage({
   params,
 }: {
-  params: { locale: string; deck: string; group: string };
+  params: Promise<{ locale: string; group: string; deck: string }>;
 }) {
-  const { locale, deck, group } = await params;
+  // Await params before destructuring its properties
+  const resolvedParams = await params;
+  const { locale, deck, group } = resolvedParams;
 
   trackPageView('deck');
 

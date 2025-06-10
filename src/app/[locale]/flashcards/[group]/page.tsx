@@ -83,7 +83,7 @@ async function GroupPageContent({
 export default async function GroupPage({
   params,
 }: {
-  params: { locale: string; group: string };
+  params: Promise<{ locale: string; group: string }>;
 }) {
   const { locale, group } = await params;
 
