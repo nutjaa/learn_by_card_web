@@ -16,7 +16,7 @@ export type FlashcardsResponse = ApiCollectionResponse<Flashcard>;
 
 export interface IGroupsApiService {
   fetchGroups(page: number, locale: string): Promise<GroupsResponse>;
-  fetchGroup(id: number): Promise<Group>;
+  fetchGroup(id: number, locale: string): Promise<Group>;
 }
 
 export interface ILanguagesApiService {

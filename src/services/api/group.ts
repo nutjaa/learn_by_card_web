@@ -15,7 +15,7 @@ export class GroupsApiService
     );
   }
 
-  async fetchGroup(id: number): Promise<Group> {
-    return this.request<Group>(`/group/${id}`);
+  async fetchGroup(id: number, locale: string): Promise<Group> {
+    return this.request<Group>(`/group/${id}?language=${locale}`);
   }
 }

@@ -29,7 +29,7 @@ export function FlashcardSlide({
   return (
     <div
       key={flashcard.id}
-      className={`absolute inset-0 flex justify-center items-center p-6 pb-8 transition-all duration-200 ease-out ${
+      className={`absolute inset-0 flex justify-center items-center p-2 pb-8 transition-all duration-200 ease-out ${
         isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
       }`}
       style={{
@@ -51,8 +51,8 @@ export function FlashcardSlide({
             alt={flashcard.name || 'Flashcard image'}
             width={0}
             height={0}
-            sizes="(max-width: 768px) 80vw, (max-width: 1200px) 60vw, 50vw"
-            className={`object-contain transition-transform duration-300 hover:scale-105 w-auto h-auto max-w-[80vw] max-h-[60vh] ${
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, (max-width: 1200px) 60vw, 50vw"
+            className={`object-contain transition-transform duration-300 hover:scale-105 w-auto h-auto max-h-[60vh] sm:max-w-[80vw] w-full sm:w-auto ${
               !isTransparentBackground ? 'rounded-3xl shadow-lg' : ''
             }`}
             style={{

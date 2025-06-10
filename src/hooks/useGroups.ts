@@ -9,7 +9,7 @@ export const groupsQueryKeys = {
   list: (page: number, locale: string) =>
     [...groupsQueryKeys.lists(), page, locale] as const,
   details: () => [...groupsQueryKeys.all, 'detail'] as const,
-  detail: (id: number) => [...groupsQueryKeys.details(), id] as const,
+  detail: (id: number, locale: string) => [...groupsQueryKeys.details(), id, locale] as const,
 };
 
 export function useGroups(
@@ -37,8 +37,8 @@ export function useGroups(
 // Fetch single group
 export function useGroup(id: number, locale: string, initialData?: Group) {
   return useQuery({
-    queryKey: groupsQueryKeys.detail(id),
-    queryFn: () => serviceProvider.groupsApi.fetchGroup(id),
+    queryKey: groupsQueryKeys.detail(id, locale),
+    queryFn: () => serviceProvider.groupsApi.fetchGroup(id, locale),
     select: (data) => Group.fromJSON(data),
     initialData: initialData ? Group.fromJSON(initialData) : undefined,
     enabled: !!id,
