@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+const isSpaMode = process.env.EXPORT_MODE === 'true';
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -10,24 +12,23 @@ const nextConfig: NextConfig = {
       },
     ],
     // Add fallback for export mode
-    ...(process.env.EXPORT_MODE === 'true' && {
+    ...(isSpaMode && {
       unoptimized: true,
     }),
   },
   // Only use static export when EXPORT_MODE is set
-  ...(process.env.EXPORT_MODE === 'true' && {
+  ...(isSpaMode && {
     output: 'export',
     trailingSlash: true,
-    // Enable SPA-like behavior for dynamic routes
-    dynamicPageRewrites: true
+    reactStrictMode: true,
+    distDir: 'build',
+    // For true SPA, disable static generation
+    skipTrailingSlashRedirect: true,
   }),
 
   // Use rewrites in development or when not exporting
   async rewrites() {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.EXPORT_MODE !== 'true'
-    ) {
+    if (process.env.NODE_ENV === 'development' || !isSpaMode) {
       return [
         {
           source: '/api/proxy/public/:path*',
@@ -41,6 +42,11 @@ const nextConfig: NextConfig = {
     }
     return [];
   },
+
+  // Generate static params for SPA mode
+  ...(isSpaMode && {
+    generateStaticParams: true,
+  }),
 };
 
 export default nextConfig;

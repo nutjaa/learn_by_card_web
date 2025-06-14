@@ -2,14 +2,6 @@ import { notFound } from 'next/navigation';
 import { SUPPORTED_LOCALES } from '../../lib/constants';
 import { LocaleProvider } from '../../components/providers/LocaleProvider';
 
-// Add this function to generate static paths for each locale
-export function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((locale) => ({
-    locale,
-  }));
-}
-
-
 export default async function LocaleLayout({
   children,
   params,

@@ -6,6 +6,11 @@ export abstract class BaseApiService {
       return 'https://www.learnbycards.com/api/public/v1';
     }
 
+    // Client-side SPA mode (exported): always use direct URLs
+    if (process.env.NEXT_PUBLIC_EXPORT_MODE === 'true') {
+      return 'https://www.learnbycards.com/api/public/v1';
+    }
+
     // Client-side: use proxy in development, direct in production
     return process.env.NODE_ENV === 'development'
       ? '/api/proxy/public'
@@ -14,6 +19,11 @@ export abstract class BaseApiService {
 
   protected getPrivateUrl(): string {
     if (typeof window === 'undefined') {
+      return 'https://www.learnbycards.com/api/auth/v1';
+    }
+
+    // Client-side SPA mode (exported): always use direct URLs
+    if (process.env.NEXT_PUBLIC_EXPORT_MODE === 'true') {
       return 'https://www.learnbycards.com/api/auth/v1';
     }
 
@@ -71,11 +81,11 @@ export abstract class BaseApiService {
   }
 
   protected getAuthToken(): string | null {
-  if (typeof window === 'undefined') {
-    return null; // Handle SSR case
+    if (typeof window === 'undefined') {
+      return null; // Handle SSR case
+    }
+    return localStorage.getItem('authToken');
   }
-  return localStorage.getItem('authToken');
-}
 
   protected handleUnauthorized(): void {
     localStorage.removeItem('authToken');

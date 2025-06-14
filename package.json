@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3003",
+    "dev:spa": "EXPORT_MODE=true next dev --turbopack -p 3003",
     "build": "next build",
     "build:export": "EXPORT_MODE=true next build",
     "start": "next start",

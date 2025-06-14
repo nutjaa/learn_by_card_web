@@ -3,41 +3,10 @@ import { safeFetch } from '../../../../lib/data-fetcher';
 import {
   getCachedStyles,
   getCachedDecks,
-  getCachedGroups,
 } from '../../../../services/cached-services';
 import { ClientRedirect } from '../../../../components/ui/ClientRedirect';
 import { createSlug } from '../../../../utils/string';
 import { PageWrapper } from '../../../../components/layout';
-import { SUPPORTED_LOCALES } from '../../../../lib/constants';
-
-export async function generateStaticParams() {
-  // Get all groups for each locale
-  const allParams = [];
-
-  for (const locale of SUPPORTED_LOCALES) {
-    try {
-      const { data } = await safeFetch(
-        () => getCachedGroups(locale),
-        'Failed to fetch groups'
-      );
-
-      // If we have groups data, add each group to parameters
-      if (data && data.member) {
-        const groupParams = data.member.map((group) => ({
-          locale,
-          group: `${group.id}-${createSlug(group.name)}`,
-        }));
-
-        allParams.push(...groupParams);
-      }
-    } catch (error) {
-      console.error(`Failed to fetch groups for locale ${locale}:`, error);
-    }
-  }
-
-  // Return all params we want to pre-render
-  return allParams;
-}
 
 // Simplified fetch functions
 const fetchInitialStyles = (locale: string) =>
@@ -49,6 +18,12 @@ const fetchInitialDecks = (groupId: number) =>
 function extractStyleId(styleUrl: string): number | null {
   const match = styleUrl.match(/\/style\/(\d+)$/);
   return match ? parseInt(match[1]) : null;
+}
+
+export async function generateStaticParams() {
+  return [
+    { locale: 'locale', group: 'group' }, // Single route that handles all client-side routing
+  ];
 }
 
 async function GroupPageContent({

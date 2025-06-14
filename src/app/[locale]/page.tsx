@@ -4,6 +4,12 @@ import { safeFetch } from '../../lib/data-fetcher';
 import { getCachedGroups } from '../../services/cached-services';
 import { PageWrapper } from '../../components/layout';
 
+export async function generateStaticParams() {
+  return [
+    { locale: 'app' }, // Single route that handles all client-side routing
+  ];
+}
+
 // Simplified fetch function using the cached service
 const fetchInitialGroups = (locale: string) =>
   safeFetch(() => getCachedGroups(locale), 'Failed to fetch groups');
@@ -22,10 +28,25 @@ async function HomeContent({ locale }: { locale: string }) {
   );
 }
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
 
   trackPageView('home');
+
+  if (locale === 'app') {
+    return (
+      <>
+        <RunningNavbar initialData={null} />
+        <main className="p-3">
+          <GroupsClient initialData={null} initialError={null} />
+        </main>
+      </>
+    );
+  }
 
   return (
     <PageWrapper>
